@@ -3,150 +3,66 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SmartStock | Akıllı Envanter</title>
+    <title>SmartStock Pro</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
 </head>
-<body class="bg-gray-100 font-sans">
-
-    <div class="flex h-screen">
-        <div class="w-64 bg-indigo-900 text-white p-6 hidden md:block">
-            <h1 class="text-2xl font-bold mb-8 italic">SmartStock</h1>
-            <nav>
-                <a href="#" class="block py-2.5 px-4 rounded transition duration-200 hover:bg-indigo-800 bg-indigo-800">
-                    <i class="fas fa-home mr-2"></i> Panel
-                </a>
-                <a href="#" class="block py-2.5 px-4 rounded transition duration-200 hover:bg-indigo-800 mt-2">
-                    <i class="fas fa-box mr-2"></i> Ürünler
-                </a>
+<body class="bg-slate-50 font-sans">
+    <div class="flex h-screen overflow-hidden">
+        <aside class="w-64 bg-slate-900 text-white flex flex-col p-6 shadow-2xl">
+            <h1 class="text-2xl font-black text-indigo-400 mb-10 tracking-tighter italic">SmartStock</h1>
+            <nav class="space-y-4">
+                <a href="#" class="flex items-center space-x-3 p-3 rounded-xl bg-indigo-600 shadow-lg"><i class="fas fa-home"></i> <span>Panel</span></a>
+                <a href="#" class="flex items-center space-x-3 p-3 rounded-xl hover:bg-slate-800 text-slate-400"><i class="fas fa-box"></i> <span>Ürünler</span></a>
             </nav>
-        </div>
+        </aside>
 
-        <div class="flex-1 flex flex-col overflow-hidden">
-            <header class="flex justify-between items-center p-4 bg-white shadow-sm">
-                <h2 class="text-xl font-semibold text-gray-800">Genel Bakış</h2>
-                <button onclick="toggleModal()" class="bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700 transition">
-                    <i class="fas fa-plus mr-2"></i> Yeni Ürün Ekle
-                </button>
+        <main class="flex-1 flex flex-col">
+            <header class="h-20 bg-white border-b flex justify-between items-center px-10">
+                <h2 class="text-xl font-bold text-slate-800 tracking-tight">Envanter Yönetimi</h2>
+                <button onclick="toggleModal()" class="bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-2.5 rounded-xl font-bold shadow-lg transition">Yeni Ürün Ekle</button>
             </header>
 
-            <main class="flex-1 overflow-x-hidden overflow-y-auto p-6">
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
-                    <div class="bg-white p-6 rounded-xl shadow-sm border-l-4 border-blue-500 text-center">
-                        <p class="text-sm text-gray-500 uppercase font-bold">Toplam Ürün</p>
-                        <p class="text-3xl font-bold text-gray-800" id="total-items">0</p>
-                    </div>
-                    </div>
-
-                <div class="bg-white shadow-sm rounded-xl p-6">
-                    <h3 class="text-lg font-bold mb-4">Envanter Listesi</h3>
-                    <div class="overflow-x-auto">
-                        <table class="w-full text-left border-collapse">
-                            <thead>
-                                <tr class="border-b text-gray-600 uppercase text-sm font-bold">
-                                    <th class="py-3 px-4">Ürün Adı</th>
-                                    <th class="py-3 px-4">Adet</th>
-                                    <th class="py-3 px-4">S.K.T</th>
-                                    <th class="py-3 px-4 text-center">İşlem</th>
-                                </tr>
-                            </thead>
-                            <tbody id="product-table-body" class="text-gray-700">
-                                </tbody>
-                        </table>
-                        <div id="loader" class="text-center py-10 text-gray-400">
-                             <p>Bağlantı kontrol ediliyor...</p>
-                        </div>
+            <div class="p-10 overflow-y-auto">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
+                    <div class="bg-white p-8 rounded-3xl shadow-sm border">
+                        <p class="text-slate-400 text-xs font-bold uppercase tracking-widest">Toplam Kayıt</p>
+                        <p id="total-items" class="text-4xl font-black text-slate-800 mt-2">0</p>
                     </div>
                 </div>
-            </main>
-        </div>
+
+                <div class="bg-white rounded-3xl shadow-sm border overflow-hidden">
+                    <table class="w-full text-left">
+                        <thead class="bg-slate-50 text-slate-400 text-xs font-black uppercase tracking-tighter">
+                            <tr>
+                                <th class="p-6">Ürün Detayı</th>
+                                <th class="p-6">Miktar</th>
+                                <th class="p-6">Durum</th>
+                                <th class="p-6 text-center">İşlem</th>
+                            </tr>
+                        </thead>
+                        <tbody id="product-table-body" class="divide-y"></tbody>
+                    </table>
+                </div>
+            </div>
+        </main>
     </div>
 
-    <div id="modal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50">
-        <div class="bg-white p-8 rounded-xl w-96 shadow-2xl">
-            <h2 class="text-xl font-bold mb-4 text-indigo-900">Yeni Ürün Ekle</h2>
+    <div id="modal" class="fixed inset-0 bg-slate-900/40 backdrop-blur-md hidden items-center justify-center z-50">
+        <div class="bg-white p-10 rounded-[2rem] w-full max-w-md shadow-2xl">
+            <h2 class="text-2xl font-black mb-6">Yeni Ürün</h2>
             <div class="space-y-4">
-                <input type="text" id="p-name" placeholder="Ürün Adı" class="w-full border p-2 rounded">
-                <input type="number" id="p-count" placeholder="Adet" class="w-full border p-2 rounded">
-                <input type="date" id="p-date" class="w-full border p-2 rounded">
-                <div class="flex justify-end space-x-2">
-                    <button onclick="toggleModal()" class="bg-gray-400 text-white px-4 py-2 rounded">İptal</button>
-                    <button id="save-btn" class="bg-indigo-600 text-white px-4 py-2 rounded font-bold">Kaydet</button>
+                <input type="text" id="p-name" placeholder="Ürün İsmi" class="w-full bg-slate-50 border-none p-4 rounded-xl outline-none focus:ring-2 focus:ring-indigo-500">
+                <input type="number" id="p-count" placeholder="Adet" class="w-full bg-slate-50 border-none p-4 rounded-xl outline-none focus:ring-2 focus:ring-indigo-500">
+                <input type="date" id="p-date" class="w-full bg-slate-50 border-none p-4 rounded-xl outline-none focus:ring-2 focus:ring-indigo-500">
+                <div class="flex space-x-3 pt-4">
+                    <button onclick="toggleModal()" class="flex-1 bg-slate-100 py-4 rounded-xl font-bold">İptal</button>
+                    <button id="save-btn" class="flex-1 bg-indigo-600 text-white py-4 rounded-xl font-bold">Kaydet</button>
                 </div>
             </div>
         </div>
     </div>
-
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-        import { getFirestore, collection, getDocs, addDoc, deleteDoc, doc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
-
-        const firebaseConfig = { 
-            apiKey: "AIzaSyBXKN57HUdC9NxkiJaR3EZu8eDp-EBGIiM", 
-            authDomain: "smart-stock-ece91.firebaseapp.com", 
-            projectId: "smart-stock-ece91", 
-            storageBucket: "smart-stock-ece91.firebasestorage.app", 
-            messagingSenderId: "123846999953", 
-            appId: "1:123846999953:web:79feeba6b19af4d0d6a430" 
-        }; 
-
-        const app = initializeApp(firebaseConfig);
-        const db = getFirestore(app);
-
-        window.toggleModal = () => {
-            const m = document.getElementById('modal');
-            m.classList.toggle('hidden'); m.classList.toggle('flex');
-        }
-
-        async function loadData() {
-            const tableBody = document.getElementById('product-table-body');
-            const loader = document.getElementById('loader');
-            try {
-                const snap = await getDocs(collection(db, "products"));
-                document.getElementById('total-items').innerText = snap.size;
-                tableBody.innerHTML = "";
-                
-                if (snap.size === 0) {
-                    loader.innerHTML = "Veritabanında ürün bulunamadı.";
-                } else {
-                    loader.classList.add('hidden');
-                    snap.forEach((productDoc) => {
-                        const data = productDoc.data();
-                        tableBody.innerHTML += `
-                            <tr class="border-b hover:bg-gray-50">
-                                <td class="py-3 px-4 font-semibold">${data.name}</td>
-                                <td class="py-3 px-4">${data.count}</td>
-                                <td class="py-3 px-4 text-sm">${data.expiryDate || '-'}</td>
-                                <td class="py-3 px-4 text-center">
-                                    <button onclick="deleteProduct('${productDoc.id}')" class="text-red-500 hover:text-red-700">
-                                        <i class="fas fa-trash"></i>
-                                    </button>
-                                </td>
-                            </tr>`;
-                    });
-                }
-            } catch (e) { console.error(e); }
-        }
-
-        document.getElementById('save-btn').onclick = async () => {
-            const name = document.getElementById('p-name').value;
-            const count = document.getElementById('p-count').value;
-            const date = document.getElementById('p-date').value;
-
-            if(name && count) {
-                await addDoc(collection(db, "products"), { name, count, expiryDate: date });
-                toggleModal(); loadData();
-            }
-        };
-
-        window.deleteProduct = async (id) => {
-            if(confirm("Bu ürünü silmek istiyor musunuz?")) {
-                await deleteDoc(doc(db, "products", id));
-                loadData();
-            }
-        };
-
-        loadData();
-    </script>
+    <script type="module" src="app.js"></script>
 </body>
 </html>
