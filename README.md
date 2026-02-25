@@ -1,4 +1,4 @@
-# SmartStock | Akıllı Envanter Yönetim Sistemi
+# SmartStock | Akıllı Stok Yönetim Sistemi
 
 Bu proje, işletmelerin veya bireysel kullanıcıların stoklarını bulut üzerinde, gerçek zamanlı olarak takip etmelerini sağlayan modern bir web uygulamasıdır.
 
