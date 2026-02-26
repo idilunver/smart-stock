@@ -1,22 +1,34 @@
-# SmartStock | Akıllı Stok Yönetim Sistemi
+# ☕ SmartStock : Cloud-Based Inventory Solution
 
-Bu proje, işletmelerin veya bireysel kullanıcıların stoklarını bulut üzerinde, gerçek zamanlı olarak takip etmelerini sağlayan modern bir web uygulamasıdır.
+SmartStock ; gerçek zamanlı veri senkronizasyonu, akıllı stok algoritmaları ve analitik görselleştirme araçlarını tek bir arayüzde sunan, bulut tabanlı bir **envanter yönetim ekosistemidir.**
 
-**[Canlı Demoyu Görüntüle](https://idilunver.github.io/smart-stock/)**
+**[ Canlı Demoyu Görüntüle](https://idilunver.github.io/smart-stock/)**
 
 ---
 
-##  Özellikler
-* **Gerçek Zamanlı Veri:** Google Firebase Firestore entegrasyonu ile veriler anlık olarak kaydedilir ve güncellenir.
-* **Modern Arayüz:** Tailwind CSS kullanılarak temiz, profesyonel ve kullanıcı dostu bir dashboard tasarlandı.
-* **Mobil Uyumlu:** Responsive tasarım sayesinde telefon, tablet ve masaüstü cihazlarda kusursuz çalışır.
-* **Ürün Yönetimi:** Ürün ekleme, adet takibi, son kullanma tarihi yönetimi ve ürün silme işlemleri yapılabilir.
+###  Teknik Altyapı
+* **Real-time Engine:** Firebase Firestore ile anlık veri senkronizasyonu.
+* **Smart Analytics:** Chart.js ile dinamik stok dağılım analizi.
+* **Modern Stack:** Tailwind CSS ve ES6+ JavaScript ile geliştirilmiş yüksek performanslı modüler yapı.
+* **Cloud Security:** Firebase Auth ile güvenli kimlik doğrulama.
 
-##  Kullanılan Teknolojiler
-* **Frontend:** HTML5, Tailwind CSS, JavaScript (ES6+)
-* **Backend:** Google Cloud / Firebase (Firestore)
-* **Hosting:** GitHub Pages
 
+
+###  Temel Fonksiyonlar
+* **Akıllı Uyarılar:** Son tüketim tarihi (SKT) hesaplama ve kritik stok limit uyarıları.
+* **Dinamik Yönetim:** Tablo içi hızlı miktar güncelleme (+/-) ve tam kapsamlı ürün düzenleme (CRUD).
+* **Zengin Arayüz:** URL tabanlı görsel desteği ve tek tıkla **Dark Mode** geçişi.
+
+###  Kurulum ve Çalıştırma
+Projeyi yerel bilgisayarınızda çalıştırmak için:
+
+1. Bu depoyu klonlayın: `git clone https://github.com/idilunver/smart-stock.git`
+2. Herhangi bir yerel sunucu (Live Server vb.) ile `index.html` dosyasını açın.
+
+---
+
+###  Demo Senaryosu
+Proje, özelliklerini sergilemek adına bir **"Gurme Kahve & Ekipman Mağazası"** konsepti üzerine yapılandırılmıştır. Kahve çekirdeklerinin tazelik süreleri (SKT) ve ekipman stok limitleri üzerinden sistemin tüm kapasitesi test edilebilir.
 
 ---
 *Bu proje yazılım geliştirme süreçlerini öğrenmek ve Full-Stack pratikleri yapmak amacıyla geliştirilmiştir.*
