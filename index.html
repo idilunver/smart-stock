@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CoffeeStock | Admin & Market</title>
+    <title>CoffeeStock Pro</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
@@ -13,15 +13,18 @@
         .dark-mode .bg-white { background-color: #1e293b; border-color: #334155; }
         .dark-mode .bg-slate-50 { background-color: #0f172a; }
         .dark-mode .text-slate-800 { color: #ffffff !important; }
-        .dark-mode td { color: #e2e8f0 !important; }
+        .dark-mode td { color: #e2e8f0 !important; border-bottom-color: #334155; }
         .dark-mode input { background-color: #0f172a; color: white; border: 1px solid #475569; }
 
         .nav-active { background-color: #4f46e5 !important; color: white !important; }
-        #cart-sidebar { transform: translateX(100%); transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1); z-index: 1000; }
+        #cart-sidebar { transform: translateX(100%); transition: all 0.4s ease; z-index: 1000; }
         #cart-sidebar.open { transform: translateX(0); }
         .cart-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 999; backdrop-filter: blur(4px); }
         .cart-overlay.show { display: block; }
         .admin-only { display: none; }
+        
+        /* Toggle Switch Yumuşak Geçiş */
+        #toggle-circle { transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
     </style>
 </head>
 <body class="bg-slate-50 font-sans transition-all duration-300" id="main-body">
@@ -31,12 +34,11 @@
     <div id="auth-screen" class="fixed inset-0 bg-slate-900/95 flex items-center justify-center z-[2000] hidden">
         <div class="bg-white p-10 rounded-[2.5rem] w-full max-w-sm shadow-2xl text-center">
             <h1 class="text-3xl font-black text-indigo-600 mb-2 italic">CoffeeStock</h1>
-            <p id="auth-msg" class="text-slate-400 text-sm mb-8 font-medium">Devam etmek için giriş yapmalısın.</p>
+            <p id="auth-msg" class="text-slate-400 text-sm mb-8">Devam etmek için giriş yapın.</p>
             <div class="space-y-4">
                 <input type="email" id="auth-email" placeholder="E-posta" class="w-full bg-slate-100 p-4 rounded-2xl outline-none">
                 <input type="password" id="auth-password" placeholder="Şifre" class="w-full bg-slate-100 p-4 rounded-2xl outline-none">
-                <button id="login-btn" class="w-full bg-indigo-600 text-white py-4 rounded-2xl font-black shadow-lg">GİRİŞ YAP</button>
-                <button onclick="document.getElementById('auth-screen').classList.add('hidden')" class="text-slate-400 text-xs font-bold uppercase">Vazgeç</button>
+                <button id="login-btn" class="w-full bg-indigo-600 text-white py-4 rounded-2xl font-black">GİRİŞ YAP</button>
             </div>
         </div>
     </div>
@@ -52,14 +54,14 @@
                 <button onclick="window.showPage('dashboard')" id="nav-dashboard" class="nav-active flex items-center space-x-3 p-4 rounded-2xl w-full text-left transition"><i class="fas fa-chart-pie"></i> <span>Yönetim</span></button>
                 <button onclick="window.showPage('market')" id="nav-market" class="flex items-center space-x-3 p-4 rounded-2xl w-full text-slate-400 hover:bg-white/5 transition text-left"><i class="fas fa-shopping-bag"></i> <span>Market</span></button>
                 
-                <div class="p-4 bg-white/5 rounded-2xl mt-4">
-                    <div class="flex justify-between items-center mb-2">
-                        <span id="mode-text-light" class="text-[10px] font-bold text-orange-400">AÇIK</span>
-                        <span id="mode-text-dark" class="text-[10px] font-bold text-slate-500">KOYU</span>
+                <div class="p-4 bg-white/5 rounded-2xl mt-4 mx-1">
+                    <div class="flex justify-between items-center mb-2 px-1">
+                        <span id="mode-text-light" class="text-[9px] font-black text-orange-400 tracking-tighter uppercase">Açık Mod</span>
+                        <span id="mode-text-dark" class="text-[9px] font-black text-slate-500 tracking-tighter uppercase">Koyu Mod</span>
                     </div>
-                    <button onclick="window.toggleDarkMode()" id="theme-toggle-btn" class="relative w-full h-8 bg-slate-700 rounded-full p-1 flex items-center transition-all">
-                        <div id="toggle-circle" class="w-6 h-6 bg-white rounded-full shadow-md flex items-center justify-center transform translate-x-0 transition-transform duration-300">
-                            <i id="theme-icon" class="fas fa-sun text-[12px] text-orange-400"></i>
+                    <button onclick="window.toggleDarkMode()" id="theme-toggle-btn" class="relative w-full h-7 bg-slate-700 rounded-full p-1 flex items-center">
+                        <div id="toggle-circle" class="w-5 h-5 bg-white rounded-full shadow-md flex items-center justify-center transform translate-x-0">
+                            <i id="theme-icon" class="fas fa-sun text-[10px] text-orange-400"></i>
                         </div>
                     </button>
                 </div>
@@ -68,22 +70,22 @@
         </aside>
 
         <main class="flex-1 flex flex-col relative overflow-hidden">
-            <header class="h-20 bg-white border-b flex justify-between items-center px-8">
-                <h2 id="page-title" class="text-lg font-black text-slate-800 uppercase tracking-widest text-indigo-600">Envanter</h2>
+            <header class="h-20 bg-white border-b flex justify-between items-center px-8 transition-all">
+                <h2 id="page-title" class="text-lg font-black text-slate-800 uppercase tracking-widest">Envanter</h2>
                 <div class="flex items-center space-x-4">
                     <button onclick="window.toggleCart()" class="relative p-3 bg-slate-100 rounded-xl text-slate-700">
                         <i class="fas fa-shopping-cart"></i>
                         <span id="cart-count" class="absolute -top-1 -right-1 bg-red-500 text-white text-[10px] w-5 h-5 rounded-full flex items-center justify-center font-bold">0</span>
                     </button>
-                    <button id="add-product-btn" onclick="window.toggleModal()" class="admin-only bg-indigo-600 text-white px-6 py-2.5 rounded-xl font-bold shadow-lg">Yeni Ürün</button>
+                    <button onclick="window.toggleModal()" class="admin-only bg-indigo-600 text-white px-6 py-2.5 rounded-xl font-bold shadow-lg">Yeni Ürün Ekle</button>
                 </div>
             </header>
 
-            <div id="content-container" class="flex-1 overflow-y-auto p-8 bg-slate-50">
+            <div id="content-container" class="flex-1 overflow-y-auto p-8 bg-slate-50 transition-all">
                 <div id="page-dashboard">
                     <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
                         <div class="bg-white p-6 rounded-[2rem] border flex flex-col justify-center">
-                            <span class="text-slate-400 text-[10px] font-black uppercase tracking-widest">Toplam Ürün</span>
+                            <span class="text-slate-400 text-xs font-black uppercase tracking-widest">Çeşit</span>
                             <h3 id="total-items" class="text-5xl font-black text-indigo-600 mt-2">0</h3>
                         </div>
                         <div class="admin-only lg:col-span-2 bg-white p-6 rounded-[2rem] border h-56">
@@ -95,10 +97,10 @@
                         <table class="w-full text-left">
                             <thead class="bg-slate-50 text-slate-400 text-[10px] font-black uppercase border-b">
                                 <tr>
-                                    <th class="p-6">Ürün Bilgisi</th>
+                                    <th class="p-6">Ürün</th>
                                     <th class="p-6">Fiyat</th>
                                     <th class="p-6 text-center">Stok</th>
-                                    <th class="p-6 text-right admin-only">İşlemler</th>
+                                    <th class="p-6 text-right admin-only">İşlem</th>
                                 </tr>
                             </thead>
                             <tbody id="product-table-body" class="divide-y divide-slate-100"></tbody>
@@ -113,29 +115,29 @@
         </main>
 
         <div id="cart-sidebar" class="fixed top-0 right-0 h-full w-96 bg-white shadow-2xl flex flex-col p-8 transition-all">
-            <h2 class="text-2xl font-black mb-10 text-slate-800 tracking-tight">Sepetiniz</h2>
+            <h2 class="text-2xl font-black mb-10 text-slate-800">Sepetiniz</h2>
             <div id="cart-items" class="flex-1 space-y-4 overflow-y-auto"></div>
             <div class="pt-8 border-t mt-6 text-slate-800">
                 <div class="flex justify-between mb-6 font-black">
-                    <span class="text-slate-400 uppercase text-xs tracking-widest">Genel Toplam</span>
+                    <span class="text-slate-400 uppercase text-xs">Toplam</span>
                     <span id="cart-total-price" class="text-2xl text-emerald-500">₺0.00</span>
                 </div>
-                <button class="w-full bg-indigo-600 text-white py-5 rounded-2xl font-black shadow-xl hover:bg-indigo-700 transition">ÖDEMEYE GEÇ</button>
+                <button class="w-full bg-indigo-600 text-white py-5 rounded-2xl font-black">SİPARİŞİ TAMAMLA</button>
             </div>
         </div>
     </div>
 
     <div id="modal" class="fixed inset-0 bg-slate-900/80 backdrop-blur-md hidden items-center justify-center z-[3000]">
         <div class="bg-white p-10 rounded-[3rem] w-full max-w-md shadow-2xl text-slate-800">
-            <h2 id="modal-title" class="text-3xl font-black mb-8 tracking-tighter text-indigo-600">Ürün Formu</h2>
+            <h2 id="modal-title" class="text-3xl font-black mb-8 tracking-tighter">Ürün Formu</h2>
             <input type="hidden" id="p-id">
             <div class="space-y-4">
-                <input type="text" id="p-name" placeholder="Ürün İsmi" class="w-full bg-slate-100 p-4 rounded-2xl outline-none border border-transparent focus:border-indigo-500 transition">
+                <input type="text" id="p-name" placeholder="Ürün İsmi" class="w-full bg-slate-100 p-4 rounded-2xl outline-none">
                 <div class="flex space-x-4">
-                    <input type="number" id="p-price" placeholder="Fiyat (₺)" class="w-1/2 bg-slate-100 p-4 rounded-2xl outline-none border border-transparent focus:border-indigo-500 transition">
-                    <input type="number" id="p-count" placeholder="Stok" class="w-1/2 bg-slate-100 p-4 rounded-2xl outline-none border border-transparent focus:border-indigo-500 transition">
+                    <input type="number" id="p-price" placeholder="Fiyat (₺)" class="w-1/2 bg-slate-100 p-4 rounded-2xl outline-none">
+                    <input type="number" id="p-count" placeholder="Stok" class="w-1/2 bg-slate-100 p-4 rounded-2xl outline-none">
                 </div>
-                <input type="text" id="p-image-url" placeholder="Görsel URL (https://...)" class="w-full bg-slate-100 p-4 rounded-2xl outline-none border border-transparent focus:border-indigo-500 transition">
+                <input type="text" id="p-image-url" placeholder="Görsel URL" class="w-full bg-slate-100 p-4 rounded-2xl outline-none">
                 <div class="flex space-x-4 pt-6">
                     <button onclick="window.toggleModal()" class="flex-1 font-bold text-slate-400">İptal</button>
                     <button id="save-btn" class="flex-2 bg-indigo-600 text-white py-4 px-8 rounded-2xl font-black shadow-lg">KAYDET</button>
