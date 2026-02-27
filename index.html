@@ -13,7 +13,7 @@
         .dark-mode .bg-white { background-color: #1e293b; border-color: #334155; }
         .dark-mode .text-slate-800 { color: #ffffff !important; }
         .admin-only { display: none; }
-        #cart-sidebar { transform: translateX(100%); transition: 0.4s; z-index: 1000; }
+        #cart-sidebar { transform: translateX(100%); transition: 0.4s ease; z-index: 1000; }
         #cart-sidebar.open { transform: translateX(0); }
         .mini-toggle { width: 42px; height: 22px; background: #334155; border-radius: 20px; position: relative; cursor: pointer; }
         .mini-circle { width: 16px; height: 16px; background: white; border-radius: 50%; position: absolute; top: 3px; left: 3px; transition: 0.3s; display: flex; align-items: center; justify-content: center; }
@@ -56,7 +56,7 @@
                         <i class="fas fa-shopping-cart"></i>
                         <span id="cart-count" class="absolute -top-1 -right-1 bg-red-500 text-white text-[10px] w-5 h-5 rounded-full flex items-center justify-center font-bold">0</span>
                     </button>
-                    <button onclick="window.toggleModal()" id="new-product-btn" class="admin-only bg-indigo-600 text-white px-6 py-2.5 rounded-xl font-bold shadow-lg">Yeni Ürün Ekle</button>
+                    <button onclick="window.toggleModal()" class="admin-only bg-indigo-600 text-white px-6 py-2.5 rounded-xl font-bold shadow-lg">Yeni Ürün Ekle</button>
                 </div>
             </header>
 
@@ -81,10 +81,10 @@
 
     <div id="cart-sidebar" class="fixed top-0 right-0 h-full w-96 bg-white shadow-2xl flex flex-col p-8 transition-all border-l">
         <h2 class="text-2xl font-black mb-10 text-slate-800">Sepetiniz</h2>
-        <div id="cart-items" class="flex-1 overflow-y-auto"></div>
+        <div id="cart-items" class="flex-1 overflow-y-auto space-y-4"></div>
         <div class="pt-8 border-t mt-6">
-            <div class="flex justify-between mb-6 font-black text-slate-800"><span>Toplam</span><span id="cart-total-price" class="text-2xl text-emerald-500">₺0.00</span></div>
-            <button class="w-full bg-slate-900 text-white py-5 rounded-2xl font-black">ÖDEME</button>
+            <div class="flex justify-between mb-6 font-black text-slate-800"><span>Toplam</span><span id="cart-total-price" class="text-2xl text-emerald-500 font-black">₺0.00</span></div>
+            <button class="w-full bg-indigo-600 text-white py-5 rounded-2xl font-black">SİPARİŞİ TAMAMLA</button>
         </div>
     </div>
 
@@ -97,9 +97,13 @@
                 <input type="number" id="p-price" placeholder="Fiyat" class="w-full bg-slate-100 p-4 rounded-2xl outline-none">
                 <input type="number" id="p-count" placeholder="Stok" class="w-full bg-slate-100 p-4 rounded-2xl outline-none">
                 <input type="text" id="p-image-url" placeholder="Görsel URL" class="w-full bg-slate-100 p-4 rounded-2xl outline-none">
-                <div class="flex space-x-4 pt-6">
-                    <button onclick="window.toggleModal()" class="flex-1 font-bold text-slate-400">İptal</button>
-                    <button id="save-btn" class="flex-2 bg-indigo-600 text-white py-4 px-8 rounded-2xl font-black">Kaydet</button>
+                
+                <div class="flex flex-col space-y-3 pt-6">
+                    <button id="save-btn" class="w-full bg-indigo-600 text-white py-4 rounded-2xl font-black shadow-lg">KAYDET</button>
+                    <div class="flex space-x-3">
+                        <button onclick="window.toggleModal()" class="flex-1 font-bold text-slate-400">İptal</button>
+                        <button id="delete-btn-modal" class="flex-1 bg-red-100 text-red-600 py-2 rounded-2xl font-bold hidden">Ürünü Sil</button>
+                    </div>
                 </div>
             </div>
         </div>
