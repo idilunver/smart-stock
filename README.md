@@ -44,8 +44,8 @@ Projeyi incelemek isteyenler için örnek giriş bilgileri:
 
 | Rol | E-posta | Şifre |
 | :--- | :--- | :--- |
-| **Admin** | `[BURAYA_ADMİN_EPOSTA_GİRİN]` | `[BURAYA_ŞİFRE_GİRİN]` |
-| **User** | `demo@user.com` | `123456` |
+| **Admin** | `admin@smartstock.com` | `admin123` |
+| **User** | `demo@user.com` | `user123` |
 
 *Not: Güvenlik nedeniyle gerçek şifrenizi değil, test amaçlı bir hesap bilgisini buraya eklemeniz önerilir.*
 
