@@ -71,5 +71,13 @@ Projeyi yerel bilgisayarınızda çalıştırmak için:
 
 ---
 
+## 📈 Gelecek Planları
+
+- [ ] **Stok Tahminleme:** Geçmiş verilere dayanarak tükenmek üzere olan ürünler için yapay zeka destekli tahminleme.
+- [ ] **QR Kod Entegrasyonu:** Her ürün için QR kod oluşturma ve mobil okuyucu ile anlık stok düşümü.
+- [ ] **Gelişmiş Raporlama:** Haftalık ve aylık satış grafiklerinin PDF formatında e-posta ile gönderilmesi.
+
+---
+
 ## 👷‍♂️ Geliştirici
 **İdil Ünver** tarafından kahve kokuları arasında geliştirildi. ✨☕️
