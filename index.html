@@ -1,121 +1,13 @@
-<!DOCTYPE html>
-<html lang="tr">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CoffeeStock Pro</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <style>
-        .dark-mode { background-color: #0f172a; color: #f8fafc; }
-        .dark-mode aside, .dark-mode header, .dark-mode #cart-sidebar { background-color: #1e293b; border-color: #334155; }
-        .dark-mode .bg-white { background-color: #1e293b; border-color: #334155; }
-        .dark-mode .text-slate-800 { color: #ffffff !important; }
-        .admin-only { display: none; }
-        #cart-sidebar { transform: translateX(100%); transition: 0.4s ease; z-index: 1000; }
-        #cart-sidebar.open { transform: translateX(0); }
-        .nav-active { background: #4f46e5 !important; color: white !important; }
-        
-        /* Modalın Tam Ortada Durması İçin */
-        #modal.active { display: flex !important; }
-    </style>
-</head>
-<body class="bg-slate-50 font-sans transition-colors duration-300" id="main-body">
-
-    <div id="auth-screen" class="fixed inset-0 bg-slate-900 flex items-center justify-center z-[2000] hidden">
-        <div class="bg-white p-10 rounded-[2.5rem] w-full max-w-sm text-center shadow-2xl">
-            <h1 class="text-3xl font-black text-indigo-600 mb-6 italic">CoffeeStock</h1>
-            <input type="email" id="auth-email" placeholder="E-posta" class="w-full bg-slate-100 p-4 rounded-2xl mb-4 outline-none border focus:border-indigo-500">
-            <input type="password" id="auth-password" placeholder="Şifre" class="w-full bg-slate-100 p-4 rounded-2xl mb-6 outline-none border focus:border-indigo-500">
-            <button id="login-btn" class="w-full bg-indigo-600 text-white py-4 rounded-2xl font-black">GİRİŞ YAP</button>
-        </div>
-    </div>
-
-    <div class="flex h-screen overflow-hidden">
-        <aside class="w-64 bg-slate-900 text-white p-6 flex flex-col z-50">
-            <div class="flex items-center space-x-3 mb-10 px-2">
-                <div class="w-10 h-10 bg-indigo-600 rounded-xl flex items-center justify-center"><i class="fas fa-mug-hot"></i></div>
-                <h1 class="text-xl font-black italic">CoffeeStock</h1>
-            </div>
-            <nav class="flex-1 space-y-2">
-                <button onclick="window.showPage('dashboard')" id="nav-dashboard" class="nav-active flex items-center space-x-3 p-4 rounded-2xl w-full text-left transition"><i class="fas fa-chart-pie"></i> <span>Yönetim</span></button>
-                <button onclick="window.showPage('market')" id="nav-market" class="flex items-center space-x-3 p-4 rounded-2xl w-full text-slate-400 hover:bg-white/5 transition text-left"><i class="fas fa-shopping-bag"></i> <span>Market</span></button>
-                <div class="p-4 bg-white/5 rounded-2xl mt-6 flex items-center justify-between">
-                    <span class="text-[10px] font-black text-slate-400 uppercase">Görünüm</span>
-                    <div class="w-10 h-5 bg-slate-700 rounded-full relative cursor-pointer" onclick="window.toggleDarkMode()">
-                        <div id="mode-circle" class="w-4 h-4 bg-white rounded-full absolute top-0.5 left-0.5 transition-all duration-300 flex items-center justify-center">
-                            <i id="mode-icon" class="fas fa-sun text-[8px] text-orange-400"></i>
-                        </div>
-                    </div>
-                </div>
-            </nav>
-            <button id="logout-btn" class="flex items-center space-x-3 p-4 rounded-2xl text-red-400 hover:bg-red-500/10 mt-auto font-bold transition"><i class="fas fa-power-off"></i> <span>Çıkış Yap</span></button>
-        </aside>
-
-        <main class="flex-1 flex flex-col overflow-hidden relative">
-            <header class="h-20 bg-white border-b flex justify-between items-center px-8 z-40">
-                <h2 id="page-title" class="text-sm font-black text-slate-400 uppercase tracking-widest">Envanter Paneli</h2>
-                <div class="flex items-center space-x-4">
-                    <button onclick="window.toggleCart()" class="relative p-3 bg-slate-100 rounded-xl text-slate-700 hover:bg-indigo-50 transition">
-                        <i class="fas fa-shopping-cart"></i>
-                        <span id="cart-count" class="absolute -top-1 -right-1 bg-red-500 text-white text-[10px] w-5 h-5 rounded-full flex items-center justify-center font-bold border-2 border-white">0</span>
-                    </button>
-                    <button onclick="window.toggleModal()" class="admin-only bg-indigo-600 text-white px-6 py-2.5 rounded-xl font-bold shadow-lg hover:bg-indigo-700 transition">Yeni Ürün Ekle</button>
-                </div>
-            </header>
-
-            <div class="flex-1 overflow-y-auto p-8 bg-slate-50" id="content-area">
-                <div id="page-dashboard">
-                    <div class="admin-only bg-white p-6 rounded-[2.5rem] border mb-8 h-72 shadow-sm">
-                        <canvas id="stockChart"></canvas>
-                    </div>
-                    <div class="bg-white rounded-[2.5rem] border overflow-hidden shadow-sm">
-                        <table class="w-full text-left">
-                            <thead class="bg-slate-50 text-slate-400 text-[10px] font-black uppercase border-b">
-                                <tr><th class="p-6">Ürün Detayı</th><th class="p-6">Birim Fiyat</th><th class="p-6 text-center">Stok</th><th class="p-6 text-right admin-only">İşlemler</th></tr>
-                            </thead>
-                            <tbody id="product-table-body" class="divide-y divide-slate-100"></tbody>
-                        </table>
-                    </div>
-                </div>
-                <div id="page-market" class="hidden grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8"></div>
-            </div>
-        </main>
-    </div>
-
-    <div id="cart-sidebar" class="fixed top-0 right-0 h-full w-96 bg-white shadow-2xl flex flex-col p-8 border-l">
-        <h2 class="text-2xl font-black mb-10 text-slate-800 tracking-tight">Sepetiniz</h2>
-        <div id="cart-items" class="flex-1 overflow-y-auto space-y-4"></div>
-        <div class="pt-8 border-t mt-6">
-            <div class="flex justify-between mb-6 font-black text-slate-800 italic"><span>Toplam</span><span id="cart-total-price" class="text-2xl text-emerald-500 tracking-tighter">₺0.00</span></div>
-            <button class="w-full bg-slate-900 text-white py-5 rounded-2xl font-black shadow-xl hover:bg-indigo-600 transition uppercase tracking-widest">Siparişi Tamamla</button>
-        </div>
-    </div>
-
-    <div id="modal" class="fixed inset-0 bg-slate-900/80 backdrop-blur-md hidden items-center justify-center z-[3000]">
-        <div class="bg-white p-10 rounded-[3rem] w-full max-w-md shadow-2xl mx-auto">
-            <h2 id="modal-title" class="text-3xl font-black mb-8 text-indigo-600 tracking-tighter">Ürün Formu</h2>
-            <input type="hidden" id="p-id">
-            <div class="space-y-4">
-                <input type="text" id="p-name" placeholder="Ürün İsmi" class="w-full bg-slate-100 p-4 rounded-2xl outline-none border focus:border-indigo-500">
-                <div class="flex space-x-4">
-                    <input type="number" id="p-price" placeholder="Fiyat (₺)" class="w-1/2 bg-slate-100 p-4 rounded-2xl outline-none border focus:border-indigo-500">
-                    <input type="number" id="p-count" placeholder="Stok" class="w-1/2 bg-slate-100 p-4 rounded-2xl outline-none border focus:border-indigo-500">
-                </div>
-                <input type="text" id="p-image-url" placeholder="Görsel URL" class="w-full bg-slate-100 p-4 rounded-2xl outline-none border focus:border-indigo-500">
-                
-                <div class="flex flex-col space-y-3 pt-6">
-                    <button id="save-btn" class="w-full bg-indigo-600 text-white py-4 rounded-2xl font-black shadow-lg hover:bg-indigo-700 transition uppercase tracking-widest">Kaydet</button>
-                    <div class="flex space-x-3">
-                        <button onclick="window.toggleModal()" class="flex-1 font-bold text-slate-400 hover:text-slate-600">Vazgeç</button>
-                        <button id="delete-btn-modal" class="flex-1 bg-red-50 text-red-500 py-3 rounded-2xl font-bold hidden hover:bg-red-100 transition">Ürünü Sil</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <script type="module" src="app.js"></script>
-</body>
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>smart-stock</title>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
 </html>

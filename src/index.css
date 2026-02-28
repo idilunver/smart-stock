@@ -1,0 +1,42 @@
+@import "tailwindcss";
+@config "../tailwind.config.js";
+
+:root {
+  font-family: 'Inter', system-ui, Avenir, Helvetica, Arial, sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+
+  color-scheme: light dark;
+  color: rgba(255, 255, 255, 0.87);
+  background-color: #242424;
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+  min-height: 100vh;
+  @apply bg-crema text-espresso-900 antialiased;
+}
+
+::selection {
+  @apply bg-caramel/20 text-espresso-900;
+}
+
+@layer base {
+  /* The original body @apply was here, but it's now moved and updated */
+}
+
+@layer components {
+  .glass-card {
+    @apply bg-white/70 backdrop-blur-xl border border-white/20 shadow-xl;
+  }
+
+  .btn-espresso {
+    @apply bg-espresso-800 text-crema px-8 py-4 rounded-[1.5rem] font-black uppercase tracking-widest text-xs hover:bg-caramel transition-all duration-300 shadow-xl shadow-espresso-900/10;
+  }
+}
